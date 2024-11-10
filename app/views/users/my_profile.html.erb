@@ -1,0 +1,21 @@
+<!-- app/views/users/my_profile.html.erb -->
+<h1>Your Profile</h1>
+
+<p><strong>Name:</strong> <%= @user.name %></p>
+
+<h3>Your Music Files</h3>
+<% if @user.audio_files.attached? %>
+  <ul>
+    <% @user.audio_files.each_with_index do |audio, index| %>
+      <li>
+        <strong>Audio File <%= index + 1 %>:</strong>
+        <audio controls>
+          <source src="<%= url_for(audio) %>" type="audio/mp3">
+          Your browser does not support the audio element.
+        </audio>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No audio files uploaded yet.</p>
+<% end %>

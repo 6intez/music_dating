@@ -1,0 +1,26 @@
+<!-- app/views/users/collaborations.html.erb -->
+<h1>My Collaborations</h1>
+
+<% if @matches.any? %>
+  <ul>
+    <% @matches.each do |match| %>
+      <li>
+        <strong><%= link_to match.name, users_path(match) %></strong>
+        <h4>Music Preferences:</h4>
+        <ul>
+          <% match.audio_files.each_with_index do |audio, index| %>
+            <li>
+              <strong>Audio File <%= index + 1 %>:</strong>
+              <audio controls>
+                <source src="<%= url_for(audio) %>" type="audio/mp3">
+                Your browser does not support the audio element.
+              </audio>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No collaborations found.</p>
+<% end %>
