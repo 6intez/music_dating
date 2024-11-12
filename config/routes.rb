@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # config/routes.rb
+  root 'home#index'
+
   devise_for :users
   get 'my_profile', to: 'users#my_profile', as: :my_profile
 
