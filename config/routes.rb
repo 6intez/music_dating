@@ -5,9 +5,12 @@ Rails.application.routes.draw do
   devise_for :users
   get 'my_profile', to: 'users#my_profile', as: :my_profile
 
+
   delete 'signout', to: 'devise/sessions#destroy', as: :signout
   namespace :api do
     get 'my_profile', to: 'users#my_profile'
+    get 'users/show', to: 'users#show'
+    post 'users/skip', to: 'users#skip'
   end
   # Маршрут для профиля других пользователей
   resources :users, only: [:show]

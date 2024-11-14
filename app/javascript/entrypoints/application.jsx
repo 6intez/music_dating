@@ -5,8 +5,21 @@ import HomePage from '../../frontend/components/HomePage'; // Путь к ком
 import Registration from '../../frontend/components/Registration'; // Путь к компоненту
 import LogInPage from '../../frontend/components/LogInPage'; // Путь к компоненту
 import MyProfile from '../../frontend/components/MyProfile.jsx'; // Путь к компоненту
+import NavBar from '../../frontend/components/NavBar.jsx';
+import ShowPage from '../../frontend/components/ShowPage.jsx';
+
+
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
+  const NavElement = document.getElementById('nav'); // id элемента, куда будет вставляться компонент
+  if (NavElement) {
+    const root = ReactDOM.createRoot(NavElement);  // Используем createRoot вместо render
+    root.render(<NavBar />);  // Монтируем компонент
+  }
+
+
   const homeElement = document.getElementById('home-page'); // id элемента, куда будет вставляться компонент
   if (homeElement) {
     const root = ReactDOM.createRoot(homeElement);  // Используем createRoot вместо render
@@ -30,4 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const root = ReactDOM.createRoot(myProfileElement);  // Используем createRoot
     root.render(<MyProfile />);  // Монтируем компонент
   }
+
+  const showElement = document.getElementById('show-page');
+  if (showElement) {
+    const root = ReactDOM.createRoot(showElement);  // Используем createRoot
+    root.render(<ShowPage />);  // Монтируем компонент
+  }
+
+  
 });
