@@ -30,7 +30,7 @@
     <nav>
       <% if user_signed_in? %>
         <%= link_to 'My Profile', my_profile_path %>
-       <%= link_to 'Sign Out', signout_path, method: :delete, data: { confirm: 'Are you sure you want to log out?' }, class: 'btn btn-primary' %>
+      <%= button_to "logout", destroy_user_session_path, method: :delete  %>
 
       <% else %>
         <%= link_to 'Sign In', new_user_session_path %>
