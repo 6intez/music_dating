@@ -3,7 +3,15 @@ class UsersController < ApplicationController
 
   def my_profile
     @user = current_user
+    audio_files = @user.audio_files.map { |file| { url: url_for(file) } }
+
+    if request.format.json?
+      render json: { user: @user, audio_files: audio_files }
+    else
+      render :my_profile
+    end
   end
+
 
   def show
     @user = User.where.not(id: current_user.id).where.not(id:current_user.liked_users.pluck(:id)).order("RANDOM()").first

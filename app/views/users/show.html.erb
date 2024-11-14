@@ -1,27 +1,2 @@
 <!-- app/views/users/show.html.erb -->
-<h1><%= @user.name %>'s Profile</h1>
-
-<h3>Music Preferences:</h3>
-<ul>
-  <% @user.audio_files.each_with_index do |audio, index| %>
-    <li>
-      <strong>Audio File <%= index + 1 %>:</strong>
-      <audio controls>
-        <source src="<%= url_for(audio) %>" type="audio/mp3">
-        Your browser does not support the audio element.
-      </audio>
-    </li>
-  <% end %>
-</ul>
-
-<!-- Проверяем, если нет доступных пользователей -->
-<% if @no_more_users %>
-  <p>Нет доступных профилей для просмотра.</p>
-<% else %>
-  <%= form_with url: like_user_path(@user), method: :post do %>
-    <%= submit_tag 'Like', class: 'btn btn-success' %>
-  <% end %>
-  <%= form_with url: skip_user_path(@user), method: :post do %>
-    <%= submit_tag 'Skip', class: 'btn btn-secondary' %>
-  <% end %>
-<% end %>
+<div id="myProfile-page"></div>

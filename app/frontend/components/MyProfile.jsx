@@ -1,35 +1,49 @@
+// MyProfile.jsx
 import React, { useEffect, useState } from 'react';
+
 
 const MyProfile = () => {
   const [user, setUser] = useState(null);
+  const [audioFiles, setAudioFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Получаем данные пользователя из атрибута data-user на странице
-    const userData = JSON.parse(document.getElementById('my-profile').dataset.user);
-    console.log(userData); // Проверьте структуру данных
-    setUser(userData);
+    // Убедитесь, что запрос идет на правильный путь API
+    fetch('/api/my_profile')  // Этот URL должен быть '/api/my_profile'
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Преобразуем в JSON
+      })
+      .then(data => {
+        setUser(data.user);
+        setAudioFiles(data.audio_files);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching user data:', err);
+        setError(err);
+        setLoading(false);
+      });
   }, []);
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h1 className="text-3xl font-semibold text-center mb-8">Your Profile</h1>
+    <div>
+      <h1>Your Profile</h1>
+      <p><strong>Name:</strong> {user.name}</p>
 
-      <div className="mb-6">
-        <p className="text-xl"><strong>Name:</strong> {user.name}</p>
-      </div>
-
-      <h3 className="text-2xl font-semibold mb-4">Your Music Files</h3>
-
-      {user.audio_files && user.audio_files.length > 0 ? (
-        <ul className="space-y-4">
-          {user.audio_files.map((audio, index) => (
-            <li key={index} className="flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow-sm">
-              <span className="text-lg font-medium">Audio File {index + 1}</span>
-              <audio controls className="w-full md:w-2/3">
+      <h3>Your Music Files</h3>
+      {audioFiles.length > 0 ? (
+        <ul>
+          {audioFiles.map((audio, index) => (
+            <li key={index}>
+              <strong>Audio File {index + 1}:</strong>
+              <audio controls>
                 <source src={audio.url} type="audio/mp3" />
                 Your browser does not support the audio element.
               </audio>
@@ -37,7 +51,7 @@ const MyProfile = () => {
           ))}
         </ul>
       ) : (
-        <p className="text-center text-gray-500">No audio files uploaded yet.</p>
+        <p>No audio files uploaded yet.</p>
       )}
     </div>
   );
