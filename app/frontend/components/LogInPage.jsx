@@ -1,36 +1,65 @@
 import React, { useState } from "react";
 
-const LoginPage = () => {
+const LogInPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
+  const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Clear previous errors
+    // Очистка предыдущих ошибок
     setErrors([]);
     setSuccessMessage("");
 
-    // Simple validation
+    // Простая валидация
     if (!email || !password) {
-      setErrors(["Email and password are required"]);
+      setErrors(["Email и пароль обязательны"]);
       return;
     }
 
-    // Submit the login form (mock API request)
+    const credentials = {
+      user: {
+        email: email,
+        password: password,
+      },
+    };
+
     try {
-      // Replace with actual login logic/API call
-      // e.g., const response = await api.login({ email, password });
-      // if (response.success) {
-      setSuccessMessage("Successfully logged in!");
-      setEmail("");
-      setPassword("");
-      // }
+      const response = await fetch("http://localhost:3000/users/sign_in", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'X-CSRF-Token': token, 
+        },
+        body: JSON.stringify(credentials),
+        credentials: "include", // Важно: позволяет браузеру сохранять куки
+      });
+
+      if (response.ok) {
+        // Успешный ответ
+        setSuccessMessage("Успешно вошли в систему!");
+        setEmail("");
+        setPassword("");
+
+        // Редирект на главную страницу
+        window.location.href = "/my_profile";
+      } else {
+        // Если неудачный ответ, пробуем обработать как текст (в случае с HTML)
+        const textResponse = await response.text();
+        
+        if (textResponse.includes("redirect")) {
+          // Если сервер пытается редиректировать, обрабатываем это
+          setSuccessMessage("Успешно вошли в систему!");
+          window.location.href = "/my_profile";
+        } else {
+          setErrors(["Ошибка входа. Пожалуйста, попробуйте снова."]);
+        }
+      }
     } catch (error) {
-      setErrors(["Login failed. Please try again."]);
+      setErrors(["Ошибка подключения. Пожалуйста, попробуйте позже."]);
     }
   };
 
@@ -38,17 +67,17 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-6">
-          Log In
+          Вход
         </h2>
 
-        {/* Success message */}
+        {/* Сообщение об успехе */}
         {successMessage && (
           <div className="text-green-600 text-center mb-4">
             {successMessage}
           </div>
         )}
 
-        {/* Error messages */}
+        {/* Сообщения об ошибках */}
         {errors.length > 0 && (
           <div className="text-red-600 text-center mb-4">
             {errors.map((error, index) => (
@@ -80,7 +109,7 @@ const LoginPage = () => {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
-              Password
+              Пароль
             </label>
             <input
               type="password"
@@ -92,49 +121,33 @@ const LoginPage = () => {
             />
           </div>
 
-          <div className="mb-4 flex items-center">
-            <input
-              type="checkbox"
-              id="rememberMe"
-              checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
-              className="mr-2"
-            />
-            <label
-              htmlFor="rememberMe"
-              className="text-sm text-gray-700"
-            >
-              Remember me
-            </label>
-          </div>
-
           <div className="text-center">
             <button
               type="submit"
               className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300"
             >
-              Log In
+              Войти
             </button>
           </div>
         </form>
 
         <div className="mt-6 text-center">
           <a
-            href="/forgot-password"
+            href="/users/password/new"
             className="text-indigo-600 hover:text-indigo-800 text-sm"
           >
-            Forgot your password?
+            Забыли пароль?
           </a>
         </div>
 
         <div className="mt-4 text-center">
           <p className="text-sm">
-            Don't have an account?{" "}
+            Нет аккаунта?{" "}
             <a
               href="/users/sign_up"
               className="text-indigo-600 hover:text-indigo-800"
             >
-              Sign Up
+              Зарегистрироваться
             </a>
           </p>
         </div>
@@ -143,4 +156,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LogInPage;

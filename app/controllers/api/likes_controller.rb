@@ -18,6 +18,6 @@ module Api
             render json: { errors: like.errors.full_messages }, status: :unprocessable_entity
           end
         end
+      end
     end
-  end
 end

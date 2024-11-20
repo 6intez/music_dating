@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   devise_for :users
   get 'my_profile', to: 'users#my_profile', as: :my_profile
-
+  
   delete 'signout', to: 'devise/sessions#destroy', as: :signout
 
   namespace :api do
@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     get 'users/show', to: 'users#show'
     get 'users/collaborations', to: 'users#collaborations'
     post 'users/skip', to: 'users#skip'
+    post '/sessions', to: 'sessions#create', as: 'sessions'
     post 'like/:id', to: 'likes#create', as: 'like_user'  # Важно использовать likes
   end
 
