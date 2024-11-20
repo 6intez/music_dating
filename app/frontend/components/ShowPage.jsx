@@ -5,29 +5,35 @@ const ShowPage = () => {
   const [user, setUser] = useState(null);
   const [noMoreUsers, setNoMoreUsers] = useState(false);
   const [swipeDirection, setSwipeDirection] = useState(null);
-
-  // Загрузка данных о пользователе с сервера
-  useEffect(() => {
-    const fetchUserData = async () => {
+  const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  // Загрузка случайного пользователя
+  const fetchRandomUser = async () => {
+    try {
       const response = await fetch('/api/users/show');
       const data = await response.json();
-
-      // Логируем данные о пользователе после загрузки
-      console.log('Fetched user data:', data);
 
       if (data.no_more_users) {
         setNoMoreUsers(true);
       } else {
-        setUser(data.user); // Устанавливаем данные о пользователе
+        setUser(data.user);
         setNoMoreUsers(false);
       }
-    };
+    } catch (error) {
+      console.error('Ошибка загрузки пользователя:', error);
+    }
+  };
 
-    fetchUserData();
-  }, []);  // Пустой массив зависимостей, чтобы запрос выполнялся один раз при монтировании компонента
+  useEffect(() => {
+    fetchRandomUser();
+  }, []);
 
   const props = useSpring({
-    transform: swipeDirection === 'left' ? 'translateX(-100%)' : swipeDirection === 'right' ? 'translateX(100%)' : 'translateX(0%)',
+    transform:
+      swipeDirection === 'left'
+        ? 'translateX(-100%)'
+        : swipeDirection === 'right'
+        ? 'translateX(100%)'
+        : 'translateX(0%)',
     opacity: swipeDirection === 'left' || swipeDirection === 'right' ? 0 : 1,
     config: { tension: 280, friction: 60 },
   });
@@ -47,31 +53,31 @@ const ShowPage = () => {
   const handleLike = async () => {
     if (user && user.id) {
       try {
-        const response = await fetch(`/like/${user.id}`, {
+        const response = await fetch(`/api/like/${user.id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-          }
+            'X-CSRF-Token': token, 
+          },
         });
-  
+
         if (!response.ok) {
           throw new Error('Ошибка при отправке лайка');
         }
-  
+
         const data = await response.json();
-        if (data.no_more_users) {
-          setNoMoreUsers(true);  // Устанавливаем флаг, если нет пользователей
-        } else {
-          setUser(data.user);  // Обновляем данные о следующем пользователе
-        }
+        console.log('Лайк успешно отправлен:', data);
+
+        // Загружаем следующего пользователя
+        fetchRandomUser();
       } catch (error) {
-        console.error("Ошибка: не удалось отправить лайк", error);
+        console.error('Ошибка: не удалось отправить лайк', error);
       }
     } else {
-      console.error("Ошибка: не найден пользователь для лайка.");
+      console.error('Ошибка: пользователь не найден.');
     }
   };
-  
+
   const handleSkip = async () => {
     if (user && user.id) {
       try {
@@ -80,42 +86,43 @@ const ShowPage = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ user_id: user.id })  // Отправляем user_id, если это необходимо
         });
-  
+
         if (!response.ok) {
-          throw new Error('Ошибка при отправке пропуска');
+          throw new Error('Ошибка при пропуске пользователя');
         }
-  
+
         const data = await response.json();
-        if (data.no_more_users) {
-          setNoMoreUsers(true);  // Устанавливаем флаг, если нет пользователей
-        } else {
-          setUser(data.user);  // Обновляем данные о следующем пользователе
-        }
+        console.log('Пользователь пропущен:', data);
+
+        // Загружаем следующего пользователя
+        fetchRandomUser();
       } catch (error) {
-        console.error("Ошибка: не удалось пропустить пользователя", error);
+        console.error('Ошибка: не удалось пропустить пользователя', error);
       }
     } else {
-      console.error("Ошибка: не найден пользователь для пропуска.");
+      console.error('Ошибка: пользователь не найден.');
     }
   };
-  
-  // Логируем данные о пользователе каждый раз, когда он обновляется
+
   useEffect(() => {
     if (user) {
-      console.log('User data updated:', user);
+      console.log('Данные пользователя обновлены:', user);
     }
-  }, [user]);  // Этот эффект будет срабатывать каждый раз, когда данные пользователя обновляются
+  }, [user]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       {noMoreUsers ? (
-        <p className="text-lg text-center font-semibold">Нет доступных профилей для просмотра.</p>
+        <p className="text-lg text-center font-semibold">
+          Нет доступных профилей для просмотра.
+        </p>
       ) : (
         <>
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h1 className="text-2xl font-bold text-center mb-4">{user?.name}'s Profile</h1>
+          <animated.div style={props} className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h1 className="text-2xl font-bold text-center mb-4">
+              {user?.name}'s Profile
+            </h1>
             <h3 className="text-xl mb-2">Music Preferences:</h3>
             <ul className="space-y-4">
               {user?.audio_files?.map((audio, index) => (
@@ -128,7 +135,7 @@ const ShowPage = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </animated.div>
 
           <div className="mt-8 flex space-x-4">
             <button

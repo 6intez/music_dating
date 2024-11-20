@@ -7,6 +7,7 @@ import LogInPage from '../../frontend/components/LogInPage'; // Путь к ко
 import MyProfile from '../../frontend/components/MyProfile.jsx'; // Путь к компоненту
 import NavBar from '../../frontend/components/NavBar.jsx';
 import ShowPage from '../../frontend/components/ShowPage.jsx';
+import Collaborations from '../../frontend/components/Collaborationpage.jsx';
 
 
 
@@ -48,6 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (showElement) {
     const root = ReactDOM.createRoot(showElement);  // Используем createRoot
     root.render(<ShowPage />);  // Монтируем компонент
+  }
+  const collabElement = document.getElementById('collaborations');
+  if (collabElement) {
+    const root = ReactDOM.createRoot(collabElement);  // Используем createRoot
+    root.render(<Collaborations />);  // Монтируем компонент
   }
 
   

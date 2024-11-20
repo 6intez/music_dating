@@ -58,6 +58,8 @@ const MyProfile = () => {
     )}
      <a class=" items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition-all duration-150 hover:bg-gray-50 sm:inline-flex"
                     href="/users/show">Найти битмейкера</a>
+      <a class=" items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition-all duration-150 hover:bg-gray-50 sm:inline-flex"
+                    href="/my_collaborations">Collab</a>
   </div>
  
 </div>

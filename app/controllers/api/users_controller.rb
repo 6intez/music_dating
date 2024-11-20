@@ -53,5 +53,10 @@ module Api
       render json: { error: 'Пользователь не найден' }, status: :unprocessable_entity
     end
 
+    def collaborations
+      @matches = current_user.matches # или другой метод для получения коллабораций
+      render json: @matches, include: :audio_files
+    end
+
   end
 end
