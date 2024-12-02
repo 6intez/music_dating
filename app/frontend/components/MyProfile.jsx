@@ -33,7 +33,7 @@ const MyProfile = () => {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-<div className="min-h-screen bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center">
+<div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
   <div className="max-w-3xl mx-auto p-6 bg-white bg-opacity-80 rounded-xl shadow-lg">
     <h1 className="text-4xl font-semibold text-gray-800 text-center mb-4">Your Profile</h1>
     <p className="text-lg text-gray-600 mb-8"><strong>Name:</strong> {user.name}</p>
@@ -56,10 +56,12 @@ const MyProfile = () => {
     ) : (
       <p className="text-gray-500">No audio files uploaded yet.</p>
     )}
-     <a class=" items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition-all duration-150 hover:bg-gray-50 sm:inline-flex"
-                    href="/users/show">Найти битмейкера</a>
-      <a class=" items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition-all duration-150 hover:bg-gray-50 sm:inline-flex"
-                    href="/my_collaborations">Collab</a>
+     <div class="flex space-x-4 m-5">
+  <a class="flex items-center justify-center rounded-xl bg-blue-500 text-white px-6 py-3 text-lg font-semibold shadow-lg transition-all duration-150 hover:bg-blue-600"
+     href="/users/show">Найти битмейкера</a>
+  <a class="flex items-center justify-center rounded-xl bg-green-500 text-white px-6 py-3 text-lg font-semibold shadow-lg transition-all duration-150 hover:bg-green-600"
+     href="/my_collaborations">Коллаборации</a>
+</div>
   </div>
  
 </div>

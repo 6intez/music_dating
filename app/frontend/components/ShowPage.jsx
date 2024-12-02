@@ -112,48 +112,51 @@ const ShowPage = () => {
   }, [user]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      {noMoreUsers ? (
-        <p className="text-lg text-center font-semibold">
-          Нет доступных профилей для просмотра.
-        </p>
-      ) : (
-        <>
-          <animated.div style={props} className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h1 className="text-2xl font-bold text-center mb-4">
-              {user?.name}'s Profile
-            </h1>
-            <h3 className="text-xl mb-2">Music Preferences:</h3>
-            <ul className="space-y-4">
-              {user?.audio_files?.map((audio, index) => (
-                <li key={index} className="flex flex-col items-center">
-                  <strong className="text-lg">Audio File {index + 1}:</strong>
-                  <audio controls className="w-full">
-                    <source src={audio.url} type="audio/mp3" />
-                    Ваш браузер не поддерживает элемент audio.
-                  </audio>
-                </li>
-              ))}
-            </ul>
-          </animated.div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 p-4">
+  {noMoreUsers ? (
+    <p className="text-lg text-center font-semibold text-white">
+      Нет доступных профилей для просмотра.
+    </p>
+  ) : (
+    <>
+      <animated.div
+        style={props}
+        className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md transform transition-all duration-300 hover:scale-105"
+      >
+        <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-6">
+          {user?.name}'s Profile
+        </h1>
+        <h3 className="text-xl text-gray-700 mb-4">Music Preferences:</h3>
+        <ul className="space-y-4">
+          {user?.audio_files?.map((audio, index) => (
+            <li key={index} className="flex flex-col items-center space-y-2">
+              <strong className="text-lg text-gray-900">Audio File {index + 1}:</strong>
+              <audio controls className="w-full rounded-lg shadow-md border border-gray-300">
+                <source src={audio.url} type="audio/mp3" />
+                Ваш браузер не поддерживает элемент audio.
+              </audio>
+            </li>
+          ))}
+        </ul>
+      </animated.div>
 
-          <div className="mt-8 flex space-x-4">
-            <button
-              onClick={() => handleSwipe('right')}
-              className="px-6 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-400 focus:outline-none"
-            >
-              Like
-            </button>
-            <button
-              onClick={() => handleSwipe('left')}
-              className="px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-400 focus:outline-none"
-            >
-              Skip
-            </button>
-          </div>
-        </>
-      )}
-    </div>
+      <div className="mt-8 flex space-x-6">
+        <button
+          onClick={() => handleSwipe('right')}
+          className="px-8 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105"
+        >
+          Like
+        </button>
+        <button
+          onClick={() => handleSwipe('left')}
+          className="px-8 py-3 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105"
+        >
+          Skip
+        </button>
+      </div>
+    </>
+  )}
+</div>
   );
 };
 

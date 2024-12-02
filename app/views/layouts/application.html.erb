@@ -36,17 +36,16 @@
    
   </header>
 
-  <div id="root">
+  
+   
+    <div id="root">
+      
     <%= yield %>
-    
-      <% if user_signed_in? %>
-        <%= link_to 'My Profile', my_profile_path %>
-      <%= button_to "logout", destroy_user_session_path, method: :delete  %>
 
-      <% else %>
-        <%= link_to 'Sign In', new_user_session_path %>
-        <%= link_to 'Sign Up', new_user_registration_path %>
-      <% end %>
+      <%= button_to "logout", destroy_user_session_path, method: :delete  %>
+      <div id="Footer">
+      
+    </div>
   </div>
 
 </html>

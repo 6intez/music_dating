@@ -8,7 +8,7 @@ import MyProfile from '../../frontend/components/MyProfile.jsx'; // Путь к 
 import NavBar from '../../frontend/components/NavBar.jsx';
 import ShowPage from '../../frontend/components/ShowPage.jsx';
 import Collaborations from '../../frontend/components/Collaborationpage.jsx';
-
+import Footer from '../../frontend/components/Footer.jsx';
 
 
 
@@ -54,6 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (collabElement) {
     const root = ReactDOM.createRoot(collabElement);  // Используем createRoot
     root.render(<Collaborations />);  // Монтируем компонент
+  }
+  const FooterElement = document.getElementById('Footer');
+  if (FooterElement) {
+    const root = ReactDOM.createRoot(FooterElement);  // Используем createRoot
+    root.render(<Footer />);  // Монтируем компонент
   }
 
   
